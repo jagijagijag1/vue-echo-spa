@@ -1,6 +1,7 @@
 package main
 
 import (
+	"./handlers"
 	"database/sql"
 	"fmt"
 	"github.com/labstack/echo"
@@ -22,10 +23,13 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
+	// static files
+	e.File("/", "public/index.html")
+
 	// Route => handler
-	e.GET("/tasks", func(c echo.Context) error { return c.JSON(200, "GET Tasks") })
-	e.PUT("/tasks", func(c echo.Context) error { return c.JSON(200, "PUT Tasks") })
-	e.DELETE("/tasks/:id", func(c echo.Context) error { return c.JSON(200, "DELETE Task "+c.Param("id")) })
+	e.GET("/tasks", handlers.GetTasks(db))
+	e.PUT("/tasks", handlers.PutTask(db))
+	e.DELETE("/tasks/:id", handlers.DeleteTask(db))
 
 	// Start server
 	e.Logger.Fatal(e.Start(":8000"))
