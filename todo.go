@@ -25,6 +25,7 @@ func main() {
 
 	// static files
 	e.File("/", "public/index.html")
+	e.Static("/public/js", "public/js")
 
 	// Route => handler
 	e.GET("/tasks", handlers.GetTasks(db))
